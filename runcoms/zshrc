@@ -11,3 +11,11 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+
+EDITOR="vim"
+
+# jenv
+if type jenv >/dev/null ; then
+  eval "$(jenv init - zsh)"
+  export JAVA_HOME="$HOME/.jenv/versions/`jenv global`"
+fi
