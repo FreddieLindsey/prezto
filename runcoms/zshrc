@@ -12,7 +12,8 @@ fi
 
 # Customize to your needs...
 
-EDITOR="vim"
+export EDITOR=vim
+export VISUAL=$EDITOR
 
 # jenv
 if type jenv >/dev/null ; then
