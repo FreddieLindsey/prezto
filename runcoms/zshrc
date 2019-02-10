@@ -15,8 +15,60 @@ fi
 export EDITOR=vim
 export VISUAL=$EDITOR
 
+# Support certificate signing
+if [ -f "/etc/pki/tls/certs/ca-bundle.crt" ]; then 
+  export CURL_CA_BUNDLE="/etc/pki/tls/certs/ca-bundle.crt"
+  alias brew="CURL_CA_BUNDLE='' brew" # brew might not work otherwise
+fi
+
 # jenv
 if type jenv >/dev/null ; then
   eval "$(jenv init - zsh)"
   export JAVA_HOME="$HOME/.jenv/versions/`jenv global`"
 fi
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+. "${NVM_DIR}/nvm.sh"
+
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+
+# rbenv
+if type rbenv >/dev/null ; then
+  eval "$(rbenv init -)"
+fi
+
+# pyenv
+if type pyenv >/dev/null ; then
+  eval "$(pyenv init -)"
+fi
+
+# gradle
+alias gw="./gradlew"
+
+# zsh
+unsetopt share_history
+
+
+## CUSTOM SCRIPTS
+alias deploy-to-ics="~/.zsh_custom_deploy-to-ics"
