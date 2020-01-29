@@ -22,7 +22,7 @@ if [ -f "/etc/pki/tls/certs/ca-bundle.crt" ]; then
 fi
 
 # jabba
-[ -s "/Users/palantir/.jabba/jabba.sh" ] && source "/Users/palantir/.jabba/jabba.sh"
+[ -s "$HOME/.jabba/jabba.sh" ] && source "$HOME/.jabba/jabba.sh"
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
