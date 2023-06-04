@@ -92,6 +92,12 @@ if type jenv >/dev/null ; then
   eval "$(jenv init -)"
 fi
 
+# rustup
+if [ -s "$HOME/.cargo/env" ]; then
+  echo "[Init] rustup"
+  source "$HOME/.cargo/env"
+fi
+
 # postgres
 if [ -d "/usr/local/opt/postgresql@9.6" ]; then
   export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
