@@ -80,7 +80,10 @@ if type pyenv >/dev/null ; then
 fi
 
 # jabba
-if [ -s "$HOME/.jabba/jabba.sh" ]; then
+if [ -s "/opt/homebrew/opt/jabba/share/jabba/jabba.sh" ]; then
+  echo "[Init] jabba (brew)"
+  . "/opt/homebrew/opt/jabba/share/jabba/jabba.sh"
+elif [ -s "$HOME/.jabba/jabba.sh" ]; then
   echo "[Init] jabba"
   source "$HOME/.jabba/jabba.sh"
 fi
