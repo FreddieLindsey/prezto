@@ -79,6 +79,9 @@ if type pyenv >/dev/null ; then
   eval "$(pyenv init -)"
 fi
 
+# poetry (python)
+export PATH="$HOME/.local/bin:$PATH"
+
 # jabba
 if [ -s "/opt/homebrew/opt/jabba/share/jabba/jabba.sh" ]; then
   echo "[Init] jabba (brew)"
