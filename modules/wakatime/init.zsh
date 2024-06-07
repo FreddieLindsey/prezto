@@ -1,0 +1,1 @@
+/Users/freddie/.nvm/versions/node/v16.20.0/lib/node_modules/wakatime-zprezto/init.zsh
