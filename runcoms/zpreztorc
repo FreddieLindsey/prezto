@@ -39,7 +39,8 @@ zstyle ':prezto:load' pmodule \
   'autosuggestions' \
   'history-substring-search' \
   'syntax-highlighting' \
-  'prompt'
+  'prompt' \
+  'wakatime'
 
 #
 # Autosuggestions
