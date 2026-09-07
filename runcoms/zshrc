@@ -15,6 +15,16 @@ fi
 export EDITOR=vim
 export VISUAL=$EDITOR
 
+# privacy
+export DISABLE_ERROR_REPORTING=1
+export DISABLE_TELEMETRY=1
+export DO_NOT_TRACK=1
+export DNT=1
+
+# Claude
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+export CLAUDE_CODE_TMUX_TRUECOLOR=1
+
 # brew
 if [ -f /opt/homebrew/bin/brew ]; then
   echo "[Init] brew"
