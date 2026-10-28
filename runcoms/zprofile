@@ -1,3 +1,8 @@
+# Docker Desktop CLI (only if Docker Desktop is installed)
+# The following lines were added by Docker Desktop to add commands to your PATH.
+if [ -d "$HOME/.docker/bin" ]; then export PATH="$PATH:$HOME/.docker/bin"; fi
+# End of Docker Desktop section.
+
 #
 # Executes commands at login pre-zshrc.
 #
@@ -50,10 +55,21 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 path=(
   $HOME/{,s}bin(N)
+  $HOME/.local/bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
   $path
 )
+
+#
+# mise
+#
+
+# Shims put mise's Node, Python, Java etc. on the PATH for non-interactive shells
+# (editors, scripts). Interactive shells get the full `mise activate` in zshrc.
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh --shims)"
+fi
 
 #
 # Less
