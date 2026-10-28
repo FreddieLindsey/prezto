@@ -165,12 +165,15 @@ alias gww="./gradleww"
 # docker
 alias dc="docker compose"
 
-# gcloud
-GCLOUD_SDK_DIR="$HOME/.gcloud/google-cloud-sdk"
-if [ -d "$GCLOUD_SDK_DIR" ]; then
-  source "$GCLOUD_SDK_DIR"/completion.zsh.inc
-  source "$GCLOUD_SDK_DIR"/path.zsh.inc
-fi
+# gcloud (Homebrew's gcloud-cli, or a manual install in ~/.gcloud)
+for GCLOUD_SDK_DIR in "${HOMEBREW_PREFIX:-/nonexistent}/share/google-cloud-sdk" "$HOME/.gcloud/google-cloud-sdk"; do
+  if [ -f "$GCLOUD_SDK_DIR/path.zsh.inc" ]; then
+    source "$GCLOUD_SDK_DIR"/path.zsh.inc
+    source "$GCLOUD_SDK_DIR"/completion.zsh.inc
+    break
+  fi
+done
+unset GCLOUD_SDK_DIR
 
 # local custom overrides
 if [ -f "$HOME/.zprofile_local_only" ]; then
