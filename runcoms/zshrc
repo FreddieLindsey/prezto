@@ -175,6 +175,32 @@ for GCLOUD_SDK_DIR in "${HOMEBREW_PREFIX:-/nonexistent}/share/google-cloud-sdk" 
 done
 unset GCLOUD_SDK_DIR
 
+# 1Password: op-ref <vault> <item> [field] prints the op:// reference by IDs
+# (op://<vault id>/<item id>/[<section>/]<field>), never names. With no field,
+# it lists every field's reference.
+if (( $+commands[op] && $+commands[jq] )); then
+  op-ref() {
+    if (( $# < 2 || $# > 3 )); then
+      echo "usage: op-ref <vault> <item> [field]" >&2
+      return 64
+    fi
+    local json
+    json=$(op item get "$2" --vault "$1" --format json) || return
+    jq -r --arg field "${3:-}" '
+      (.vault.id) as $v | (.id) as $i
+      | (reduce (.sections // [])[] as $s ({}; .[$s.id] = ($s.label // $s.id))) as $sections
+      | [.fields[]
+          | select(.purpose != "NOTES" or $field != "")
+          | select($field == "" or .label == $field or .id == $field)
+          | {label: (.label // .id),
+             path: ((if .section.id and $sections[.section.id] and $sections[.section.id] != "" then $sections[.section.id] + "/" else "" end) + (.label // .id))}]
+      | if length == 0 then error("no field \($field) in this item")
+        elif $field != "" then .[0] | "op://\($v)/\($i)/\(.path)"
+        else .[] | "\(.label)\top://\($v)/\($i)/\(.path)" end
+    ' <<< "$json"
+  }
+fi
+
 # local custom overrides
 if [ -f "$HOME/.zprofile_local_only" ]; then
   echo "[Init] local zprofile"
