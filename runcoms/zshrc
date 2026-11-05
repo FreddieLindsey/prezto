@@ -118,6 +118,9 @@ alias gf='git fetch'
 alias gfa='git fetch --all --tags --prune'
 alias gfo='git fetch origin'
 
+alias ggl='git pull github $(git branch --show-current)'
+alias ggp='git push github $(git branch --show-current)'
+
 alias gl='git pull'
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
@@ -218,6 +221,14 @@ compresspdf() {
 # Tailscale CLI (mac)
 TAILSCALE_BINARY="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 if [ -f "$TAILSCALE_BINARY" ]; then alias tailscale="$TAILSCALE_BINARY"; fi
+
+# JetBrains Toolbox scripts (mac)
+if [ -d "$HOME/Library/Application Support/JetBrains/Toolbox/scripts" ]; then
+  export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
+fi
+
+# LM Studio CLI
+if [ -d "$HOME/.lmstudio/bin" ]; then export PATH="$PATH:$HOME/.lmstudio/bin"; fi
 
 # Docker Desktop CLI completions (only if Docker Desktop is installed)
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
