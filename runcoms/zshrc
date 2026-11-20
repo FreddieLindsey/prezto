@@ -178,6 +178,27 @@ for GCLOUD_SDK_DIR in "${HOMEBREW_PREFIX:-/nonexistent}/share/google-cloud-sdk" 
 done
 unset GCLOUD_SDK_DIR
 
+# 1Password on servers: op runs as this server's service account. The dotfiles'
+# install.sh keeps its token encrypted with systemd-creds. Each call checks for it
+# and, if it's there, passes it to that one op command, never exporting it.
+# Anywhere else op runs as usual. `command op` skips this.
+if (( $+commands[op] )); then
+  op() {
+    local file=~/.config/op-ssh-agent/token.cred token
+    if [[ -n $OP_SERVICE_ACCOUNT_TOKEN || ! -e $file ]]; then
+      command op "$@"
+      return
+    fi
+    (( $+commands[systemd-creds] )) &&
+      token=$(systemd-creds --user decrypt --name=op-token $file - 2>/dev/null)
+    if [[ -z $token ]]; then
+      echo "op: can't read this server's service account token. Run the dotfiles' install.sh to set it again." >&2
+      return 1
+    fi
+    OP_SERVICE_ACCOUNT_TOKEN=$token command op "$@"
+  }
+fi
+
 # 1Password: op-ref <vault> <item> [field] prints the op:// reference by IDs
 # (op://<vault id>/<item id>/[<section>/]<field>), never names. With no field,
 # it lists every field's reference.
